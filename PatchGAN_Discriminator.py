@@ -24,13 +24,13 @@ class PatchGAN_Discriminator(Model):
         self.input_layer = layers.InputLayer(input_shape=[self.image_size, self.image_size, 3])
         
         # Downsample layers
-        self.down1 = self.downsample(64, 4)
-        self.down2 = self.downsample(128, 4)
-        self.down3 = self.downsample(256, 4)
+        self.down1 = self.downsample(32, 4)
+        self.down2 = self.downsample(64, 4)
+        self.down3 = self.downsample(64, 4)
         
         # Convolution layers
-        self.conv1 = layers.Conv2D(256, (4, 4,), strides=(1, 1), padding='same', kernel_initializer=self.initializer)
-        self.conv2 = layers.Conv2D(512, 4, strides=1, kernel_initializer=self.initializer, use_bias=False)
+        self.conv1 = layers.Conv2D(64, (4, 4,), strides=(1, 1), padding='same', kernel_initializer=self.initializer)
+        self.conv2 = layers.Conv2D(128, 4, strides=1, kernel_initializer=self.initializer, use_bias=False)
         self.conv3 = layers.Conv2D(1, 4, strides=1, kernel_initializer=self.initializer)
         
         # Normalization and activation layers
@@ -42,6 +42,7 @@ class PatchGAN_Discriminator(Model):
         self.zero_pad2 = layers.ZeroPadding2D()
         
         # Final layer to flatten output
+        self.dropout = layers.Dropout(0.5)
         self.flatten = layers.Flatten()
         self.dense = layers.Dense(1, activation = 'sigmoid')
     
@@ -64,6 +65,7 @@ class PatchGAN_Discriminator(Model):
 
         #Apply the first convolutional layer
         x = self.conv1(x)
+        x = self.dropout(x)
 
         #Apply padding
         x = self.zero_pad1(x)
@@ -76,6 +78,7 @@ class PatchGAN_Discriminator(Model):
         x = self.leaky_relu(x)
         x = self.zero_pad2(x)
         x = self.conv3(x)
+        
         x = self.flatten(x)
         last = self.dense(x)
         
@@ -98,5 +101,6 @@ class PatchGAN_Discriminator(Model):
         if apply_batchnorm:
             model.add(layers.BatchNormalization())
             model.add(layers.LeakyReLU())
+        model.add(layers.Dropout(0.2))
         
         return model

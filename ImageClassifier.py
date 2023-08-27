@@ -3,6 +3,7 @@ from tensorflow import keras
 from keras.callbacks import ModelCheckpoint, TensorBoard
 import os
 import datetime
+import zipfile
 
 class ImageClassifier:
     """Class for building and training an image classifier for detecting real and AI-generated images."""
@@ -65,14 +66,14 @@ class ImageClassifier:
         
         # TensorBoard callback
         log_dir = "logs/fit/" + datetime.datetime.now().strftime("%Y%m%d-%H%M%S")
-        tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1)
+        tensorboard_callback = TensorBoard(log_dir=log_dir, histogram_freq=1, update_freq='batch')
 
         # Fit the model
         model.fit(
             self.train_data, 
             epochs=self.EPOCHS, 
             validation_data=self.test_data, 
-            shuffle=False, 
+            shuffle=True, 
             verbose=1,
             callbacks=[checkpoint_callback, tensorboard_callback]
         )
