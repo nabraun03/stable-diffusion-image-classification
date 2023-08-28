@@ -24,16 +24,16 @@ class Simple_CNN(Model):
         self.input_layer = layers.InputLayer(input_shape=[self.image_size, self.image_size, 3])
         
         self.conv1 = layers.Conv2D(32, (4, 4,), strides=(1, 1), padding='same', kernel_initializer=self.initializer)
-        self.conv2 = layers.Conv2D(64, 4, strides = 1, kernel_initializer=self.initializer)
+        self.conv2 = layers.Conv2D(32, 4, strides = 1, kernel_initializer=self.initializer)
 
         self.max_pooling = layers.MaxPool2D(pool_size=(2, 2))
 
-        self.dropout1 = layers.Dropout(0.2)
-        self.dropout2 = layers.Dropout(0.4)
+        self.dropout1 = layers.Dropout(0.25)
+        self.dropout2 = layers.Dropout(0.5)
 
         self.flatten = layers.Flatten()
 
-        self.dense1 = layers.Dense(128, activation = 'relu')
+        self.dense1 = layers.Dense(256, activation = 'relu')
         self.dense2 = layers.Dense(1, activation = 'sigmoid')
     
     def call(self, inputs):
