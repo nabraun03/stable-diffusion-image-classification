@@ -25,8 +25,8 @@ class PatchGAN_Discriminator(Model):
         
         # Downsample layers
         self.down1 = self.downsample(32, 4)
-        self.down2 = self.downsample(32, 4)
-        self.down3 = self.downsample(64, 4)
+        self.down2 = self.downsample(64, 4)
+        self.down3 = self.downsample(128, 4)
         
         # Convolution layers
         self.conv1 = layers.Conv2D(256, (4, 4,), strides=(1, 1), padding='same', kernel_initializer=self.initializer)
@@ -41,6 +41,11 @@ class PatchGAN_Discriminator(Model):
         self.zero_pad1 = layers.ZeroPadding2D()
         self.zero_pad2 = layers.ZeroPadding2D()
         
+        #Dropout layers
+        self.drop1 = layers.Dropout(0.25)
+        self.drop2 = layers.Dropout(0.25)
+
+
         # Final layer to flatten output
         self.flatten = layers.Flatten()
         self.dense = layers.Dense(1, activation = 'sigmoid')
@@ -64,12 +69,14 @@ class PatchGAN_Discriminator(Model):
 
         #Apply the first convolutional layer
         x = self.conv1(x)
+        x = self.drop1(x)
 
         #Apply padding
         x = self.zero_pad1(x)
 
         #Apply second convolutional layer
         x = self.conv2(x)
+        x = self.drop2(x)
 
         #Apply normalization
         x = self.norm_layer(x)
