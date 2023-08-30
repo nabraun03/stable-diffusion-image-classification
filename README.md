@@ -3,8 +3,8 @@
 ## **Introduction**
 
 This project attempts to tackle the inreasingly relevant problem of classifying real images from those generated through sophisticated techniques like stable diffusion. This repository contains two machine learning models that are designed for this problem:
--**PatchGAN Discriminator:** Inspired by the discriminator in a pix2pix generative adversarial network, the PatchGAN discriminator was designed to evaluate whether an image is real or fake by determining whether individual patches of the image are real or fake. This feature will hopefully allow it to learn finer details of the images and better distinguish real images from those generated through stable diffusion.
--**Convolutional Neural Network:** A simple CNN was used as a baseline for comparison against the PatchGAN model. This model was inspired by Sahil Danayak on Kaggle, cited below.
+- **PatchGAN Discriminator:** Inspired by the discriminator in a pix2pix generative adversarial network, the PatchGAN discriminator was designed to evaluate whether an image is real or fake by determining whether individual patches of the image are real or fake. This feature will hopefully allow it to learn finer details of the images and better distinguish real images from those generated through stable diffusion.
+- **Convolutional Neural Network:** A simple CNN was used as a baseline for comparison against the PatchGAN model. This model was inspired by Sahil Danayak on Kaggle, cited below.
 This project uses real images from the CIFAR-10 dataset, and stable diffusion images from the CIFAKE dataset created by Bird & Lofti, both cited below.
 
 ## **Technologies Required**
