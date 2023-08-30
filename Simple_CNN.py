@@ -63,16 +63,22 @@ class Simple_CNN(Model):
         """
         x = self.input_layer(inputs)
 
-
+        #Apply convolutional layers with max pooling between
         x = self.conv1(x)
         x = self.max_pooling(x)
         x = self.conv2(x)
 
-
+        #Apply dropout before dense layers
         x = self.dropout1(x)
+
+        #Flatten
         x = self.flatten(x)
+
+        #Apply dense layer with dropout after
         x = self.dense1(x)
         x = self.dropout2(x)
+
+        #Apply final dense layer with sigmoid activation
         x = self.dense2(x)
 
         return x

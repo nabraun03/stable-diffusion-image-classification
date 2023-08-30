@@ -7,18 +7,10 @@ def main():
     classifier = ImageClassifier()
     
     # Initialize PatchGAN Discriminator with the same image size as the classifier
-    
-    #cnn = Simple_CNN(image_size=ImageClassifier.IMAGE_HEIGHT)
+    patch_gan_discriminator = PatchGAN_Discriminator(image_size=ImageClassifier.IMAGE_HEIGHT)
     
     # Compile and fit the model
-    #classifier.compile_and_fit(cnn)
-    patch_gan_discriminator = PatchGAN_Discriminator(image_size=ImageClassifier.IMAGE_HEIGHT)
     classifier.compile_and_fit(patch_gan_discriminator)
-
-    
-    # Here you can add code to use the PatchGAN_Discriminator
-    # For example, you might want to use it to evaluate the realism of generated images
-    # ...
 
 if __name__ == "__main__":
     main()

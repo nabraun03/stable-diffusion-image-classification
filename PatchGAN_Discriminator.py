@@ -57,6 +57,7 @@ class PatchGAN_Discriminator(Model):
         self.zero_pad1 = layers.ZeroPadding2D()
         self.zero_pad2 = layers.ZeroPadding2D()
 
+        #Final layers
         self.flatten = layers.Flatten()
         self.dense = layers.Dense(1, activation  = 'sigmoid')
     
@@ -94,6 +95,7 @@ class PatchGAN_Discriminator(Model):
         #Second convolutional layer
         x = self.conv2(x)
 
+        #Flatten and use dense layer with sigmoid activation
         x = self.flatten(x)
         x = self.dense(x)
         
@@ -110,11 +112,18 @@ class PatchGAN_Discriminator(Model):
         Returns:
             keras.Sequential: A sequential model for downsampling.
         """
+
         initializer = tf.random_normal_initializer(0, 0.02)
         model = keras.Sequential()
+
+        #Downsample the image
         model.add(layers.Conv2D(num_filters, size, strides=2, padding='same', kernel_initializer=initializer, use_bias=False))
+
+        #Apply batch normalization unless specified not to
         if apply_batchnorm:
             model.add(layers.BatchNormalization())
+
+        #Apply LeakyReLU activation and dropout
         model.add(layers.LeakyReLU())
         model.add(layers.Dropout(0.5))
         
