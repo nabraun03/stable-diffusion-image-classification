@@ -1,3 +1,19 @@
+#Model inspired by pix2pix implementation of PatchGAN from Tensorflow
+#Copyright 2019 The Tensorflow Authors
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+
+
 from tensorflow import keras
 import tensorflow as tf
 from keras import layers, Model
@@ -24,31 +40,25 @@ class PatchGAN_Discriminator(Model):
         self.input_layer = layers.InputLayer(input_shape=[self.image_size, self.image_size, 3])
         
         # Downsample layers
-        self.down1 = self.downsample(32, 4)
-        self.down2 = self.downsample(64, 4)
-        self.down3 = self.downsample(128, 4)
+        self.down1 = self.downsample(64, 4)
+        self.down2 = self.downsample(128, 4)
+        self.down3 = self.downsample(256, 4)
         
         # Convolution layers
-        self.conv1 = layers.Conv2D(256, (4, 4,), strides=(1, 1), padding='same', kernel_initializer=self.initializer)
-        self.conv2 = layers.Conv2D(512, 4, strides=1, kernel_initializer=self.initializer, use_bias=False)
-        self.conv3 = layers.Conv2D(1, 4, strides=1, kernel_initializer=self.initializer)
+        self.conv1 = layers.Conv2D(512, 4, strides=1, kernel_initializer=self.initializer, use_bias=False)
+        self.conv2 = layers.Conv2D(1, 4, strides=1, kernel_initializer=self.initializer)
         
         # Normalization and activation layers
         self.norm_layer = layers.BatchNormalization()
         self.leaky_relu = layers.LeakyReLU()
+        self.dropout = layers.Dropout(0.5)
         
         # Padding layers
         self.zero_pad1 = layers.ZeroPadding2D()
         self.zero_pad2 = layers.ZeroPadding2D()
-        
-        #Dropout layers
-        self.drop1 = layers.Dropout(0.25)
-        self.drop2 = layers.Dropout(0.25)
 
-
-        # Final layer to flatten output
         self.flatten = layers.Flatten()
-        self.dense = layers.Dense(1, activation = 'sigmoid')
+        self.dense = layers.Dense(1, activation  = 'sigmoid')
     
     def call(self, inputs):
         """Forward pass for the model.
@@ -67,27 +77,27 @@ class PatchGAN_Discriminator(Model):
         x = self.down2(x)
         x = self.down3(x)
 
-        #Apply the first convolutional layer
-        x = self.conv1(x)
-        x = self.drop1(x)
-
         #Apply padding
         x = self.zero_pad1(x)
 
-        #Apply second convolutional layer
-        x = self.conv2(x)
-        x = self.drop2(x)
+        #Apply first convolutional layer
+        x = self.conv1(x)
 
-        #Apply normalization
+        #Apply normalization and activation
         x = self.norm_layer(x)
         x = self.leaky_relu(x)
+        x = self.dropout(x)
+
+        #Apply padding
         x = self.zero_pad2(x)
-        x = self.conv3(x)
-        
+
+        #Second convolutional layer
+        x = self.conv2(x)
+
         x = self.flatten(x)
-        last = self.dense(x)
+        x = self.dense(x)
         
-        return last
+        return x
     
     def downsample(self, num_filters, size, apply_batchnorm=True):
         """Downsample the image.
@@ -106,6 +116,8 @@ class PatchGAN_Discriminator(Model):
         if apply_batchnorm:
             model.add(layers.BatchNormalization())
         model.add(layers.LeakyReLU())
-        model.add(layers.Dropout(0.25))
+        model.add(layers.Dropout(0.5))
         
         return model
+
+
