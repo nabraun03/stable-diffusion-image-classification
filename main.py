@@ -1,6 +1,14 @@
 from ImageClassifier import ImageClassifier  # Import the ImageClassifier class
 from PatchGAN_Discriminator import PatchGAN_Discriminator  # Import the PatchGAN_Discriminator class
 from Simple_CNN import Simple_CNN
+import tensorflow as tf
+
+def generate_model_diagrams():
+    p = PatchGAN_Discriminator()
+    c = Simple_CNN()
+    tf.keras.utils.plot_model(p, to_file='patchgan.png', show_shapes = True)
+    tf.keras.utils.plot_model(c, to_file = 'cnn.png', show_shapes = True)
+
 
 def main():
     # Initialize Image Classifier
