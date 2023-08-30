@@ -78,6 +78,9 @@ These graphs chart the accuracy and loss of the models on the validation sets af
 | PatchGAN Discriminator | 0.1536   | 0.9377   | 0.9143    | 0.9671 |
 | Simple CNN             | 0.2316   | 0.9271   | 0.9493    | 0.9024 |
 
+## **Limitations**
+Although the PatchGAN discriminator eventually managed higher validation accuracy, the training time was significantly longer. Additionally, the PatchGAN model required more fine-tuning on downsampling, dropout, and the number of filters to prevent overfitting. A more overarching limitation of this problem is that, while we successfully trained models to quite accurately discern real and generated images on this dataset, sophisticated techniques to create more convincing generated images are constantly evolving, and these models might not be applicable to those techniques unless also trained on a dataset that contains images generated with these techniques.
+
 ## **Requirements**
 - Python 3.x
 - Tensorflow 2.x
