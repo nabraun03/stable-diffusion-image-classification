@@ -2,8 +2,8 @@
 
 ## **Introduction**
 
-This project attempts to tackle the inreasingly relevant problem of classifying real images from those generated through sophisticated techniques like stable diffusion. This repository contains two machine learning models that are designed for this problem:
-- **PatchGAN Discriminator:** Inspired by the discriminator in a pix2pix generative adversarial network, the PatchGAN discriminator was designed to evaluate whether an image is real or fake by determining whether individual patches of the image are real or fake. This feature will hopefully allow it to learn finer details of the images and better distinguish real images from those generated through stable diffusion.
+This project attempts to tackle the increasingly relevant problem of classifying real images from those generated through sophisticated techniques like stable diffusion. This repository contains two machine learning models that are designed for this problem:
+- **PatchGAN Discriminator:** Inspired by the discriminator in a pix2pix generative adversarial network, the PatchGAN discriminator was designed to evaluate whether an image is real or fake by determining whether individual patches of the image are real or fake. This feature will hopefully allow it to learn the finer details of the images and better distinguish real images from those generated through stable diffusion.
 - **Convolutional Neural Network:** A simple CNN was used as a baseline for comparison against the PatchGAN model. This model was inspired by Sahil Danayak on Kaggle, cited below.
 This project uses real images from the CIFAR-10 dataset, and stable diffusion images from the CIFAKE dataset created by Bird & Lofti, both cited below.
 
@@ -27,6 +27,21 @@ Each image input into the PatchGAN is downsampled to reduce its dimensions and e
 After downsampling, the feature maps produced are passed into a large convolutional layer to learn more about the image and its features. The padding layers preserve the dimensions of the feature map, which ensures that the network retains contextual information for each patch of the image.
 ### **Dense Layer**
 One dense layer is used at the end of our PatchGAN, learning from the abstraction of the features to make a prediction about the authenticity of the image. Like the CNN, we use a sigmoid activation function. In the PatchGAN, the output of this layer is the "patch-wise classification score," because the model makes use of information and context inferred from the patches to make predictions about them, using them towards an overall prediction about the image.
+
+## **Example images**
+<div style="display: flex;">
+  <div style="flex: 1;">
+    <img src="resources/real_examples/0371 (7).png" alt="Image1" style="width: 250px;"/>
+    <img src="resources/real_examples/0797 (5).png" alt="Image1" style="width: 250px;"/>
+    <img src="resources/real_examples/1882 (2).png" alt="Image1" style="width: 250px;"/>
+    <img src="resources/real_examples/4971 (10).png" alt="Image1" style="width: 250px;"/>
+    <img src="resources/real_examples/4972 (9).png" alt="Image1" style="width: 250px;"/>
+  </div>
+  <div style="flex: 1;">
+    <img src="image2.png" alt="Image2" style="width: 250px;"/>
+  </div>
+</div>
+
 
 ## **Results**
 
