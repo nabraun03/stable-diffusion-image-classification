@@ -3,9 +3,10 @@
 ## **Introduction**
 
 This project attempts to tackle the increasingly relevant problem of classifying real images from those generated through sophisticated techniques like stable diffusion. This repository contains two machine learning models that are designed for this problem:
-- **PatchGAN Discriminator:** Inspired by the discriminator in a pix2pix generative adversarial network, the PatchGAN discriminator was designed to evaluate whether an image is real or fake by determining whether individual patches of the image are real or fake. This feature will hopefully allow it to learn the finer details of the images and better distinguish real images from those generated through stable diffusion.
-- **Convolutional Neural Network:** A simple CNN was used as a baseline for comparison against the PatchGAN model. This model was inspired by Sahil Danayak on Kaggle, cited below.
-This project uses real images from the CIFAR-10 dataset, and stable diffusion images from the CIFAKE dataset created by Bird & Lofti, both cited below.
+- **PatchGAN Discriminator:** Inspired by the discriminator in a pix2pix generative adversarial network [[1]](https://www.tensorflow.org/tutorials/generative/pix2pix), the PatchGAN discriminator was designed to evaluate whether an image is real or fake by determining whether individual patches of the image are real or fake. This feature will hopefully allow it to learn the finer details of the images and better distinguish real images from those generated through stable diffusion.
+- **Convolutional Neural Network:** A simple CNN was used as a baseline for comparison against the PatchGAN model. This model was inspired by Sahil Danayak on Kaggle [[2]](https://www.kaggle.com/code/sahildanayak/real-and-ai-images-classifier).
+
+This project uses real images from the CIFAR-10 dataset [[3]](https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf), and stable diffusion images from the CIFAKE dataset created by Bird & Lofti [[4]](https://arxiv.org/abs/2303.14126).
 
 ## **Convolutional Neural Networks (CNNs)**
 ### **Convolutional Layers**
@@ -28,26 +29,54 @@ After downsampling, the feature maps produced are passed into a large convolutio
 ### **Dense Layer**
 One dense layer is used at the end of our PatchGAN, learning from the abstraction of the features to make a prediction about the authenticity of the image. Like the CNN, we use a sigmoid activation function. In the PatchGAN, the output of this layer is the "patch-wise classification score," because the model makes use of information and context inferred from the patches to make predictions about them, using them towards an overall prediction about the image.
 
-## **Example images**
-<div style="display: flex;">
-  <div style="flex: 1;">
-    <img src="resources/real_examples/0371 (7).png" alt="Image1" style="width: 250px;"/>
-    <img src="resources/real_examples/0797 (5).png" alt="Image1" style="width: 250px;"/>
-    <img src="resources/real_examples/1882 (2).png" alt="Image1" style="width: 250px;"/>
-    <img src="resources/real_examples/4971 (10).png" alt="Image1" style="width: 250px;"/>
-    <img src="resources/real_examples/4972 (9).png" alt="Image1" style="width: 250px;"/>
-  </div>
-  <div style="flex: 1;">
-    <img src="image2.png" alt="Image2" style="width: 250px;"/>
-  </div>
+## **Example Images**
+<div align = "center">
+<table>
+  <tr>
+    <td>
+        <div align = "center">Real Images</div><br>
+        <img src="resources/real_examples/0371.jpg" alt="Image1" style="width: 100px;"/><br>
+        <img src="resources/real_examples/0797.jpg" alt="Image1" style="width: 100px;"/><br>
+        <img src="resources/real_examples/1882.jpg" alt="Image1" style="width: 100px;"/><br>
+        <img src="resources/real_examples/4971.jpg" alt="Image1" style="width: 100px;"/><br>
+        <img src="resources/real_examples/4972.jpg" alt="Image1" style="width: 100px;"/><br>
+    </td>
+    <td>
+        <div align = "center">Fake Images</div><br>
+        <img src="resources/fake_examples/2579.jpg" alt="Image1" style="width: 100px;"/><br>
+        <img src="resources/fake_examples/2580.jpg" alt="Image1" style="width: 100px;"/><br>
+        <img src="resources/fake_examples/3431.jpg" alt="Image1" style="width: 100px;"/><br>
+        <img src="resources/fake_examples/3967.jpg" alt="Image1" style="width: 100px;"/><br>
+        <img src="resources/fake_examples/39679.jpg" alt="Image1" style="width: 100px;"/><br>
+    </td>
+  </tr>
+</table>
 </div>
 
-
 ## **Results**
+Both models were trained for 25 epochs with no GPU/TPU acceleration. The CNN took 1.6 hours to train, while the PatchGAN took 4.2 hours.
 
+### **Training Metrics**
 
+![](resources/batch_loss_accuracy.png)
 
+These graphs chart the accuracy and loss after each training step. The dark blue line represents the CNN, and the green line represents the PatchGAN. The CNN outperformed the PatchGAN in training, with metrics after 25 epochs shown in the table below:
 
+| Model Name             | Loss     | Accuracy | Precision | Recall |
+|------------------------|----------|----------|-----------|--------|
+| PatchGAN Discriminator | 0.1492   | 0.9412   | 0.9416    | 0.9408 |
+| Simple CNN             | 0.1200   | 0.9552   | 0.9486    | 0.9626 |
+
+### **Validation Metrics**
+
+![](resources/validation_loss_accuracy.png)
+
+These graphs chart the accuracy and loss of the models on the validation sets after each epoch. The light blue line represents the CNN, and the orange line represents the PatchGAN. While the CNN outperformed the PatchGAN in earlier epochs, the PatchGAN improved more slowly but persistently and surpassed the CNN in accuracy and loss in later epochs. The metrics of each model on the validation set after 25 epochs are displayed below:
+
+| Model Name             | Loss     | Accuracy | Precision | Recall |
+|------------------------|----------|----------|-----------|--------|
+| PatchGAN Discriminator | 0.1536   | 0.9377   | 0.9143    | 0.9671 |
+| Simple CNN             | 0.2316   | 0.9271   | 0.9493    | 0.9024 |
 
 ## **Requirements**
 - Python 3.x
@@ -68,3 +97,38 @@ To run the project after cloning the repository and downloading the dataset, exe
   python main.py
 </pre>
 
+## **Citations and Licensing**
+[[1]](https://www.tensorflow.org/tutorials/generative/pix2pix) Copyright 2019 The Tensorflow Authors
+<pre>
+Licensed under the Apache License, Version 2.0 (the "License");
+
+You may not use this file except in compliance with the License.
+
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, softwaredistributed under the License is distributed on an "AS IS" BASIS,WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+</pre>
+[[2]](https://www.kaggle.com/code/sahildanayak/real-and-ai-images-classifier) Copyright 2023 Sahil Danayak
+<pre>
+Licensed under the Apache License, Version 2.0 (the "License");
+
+You may not use this file except in compliance with the License.
+
+You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+</pre>
+[[3]](https://www.cs.toronto.edu/~kriz/learning-features-2009-TR.pdf) Krizhevsky, A., & Hinton, G. (2009). Learning multiple layers of features from tiny images.
+
+[[4]](https://arxiv.org/abs/2303.14126) Bird, J.J., Lotfi, A. (2023). CIFAKE: Image Classification and Explainable Identification of AI-Generated Synthetic Images. arXiv preprint arXiv:2303.14126.
+<pre>
+License: Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+</pre>
