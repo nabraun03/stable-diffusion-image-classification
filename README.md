@@ -25,6 +25,11 @@ The PatchGAN architecture is a specialized CNN designed to classify each patch o
 Each image input into the PatchGAN is downsampled to reduce its dimensions and extract features. The downsampling layers first apply a convolutional layer, then batch normalization to standardize the feature maps. LeakyReLU activation is then used to introduce non-linearity, and we added a dropout layer to each downsampling such that the model does not overfit.
 ### **Convolutional and Padding Layers**
 After downsampling, the feature maps produced are passed into a large convolutional layer to learn more about the image and its features. The padding layers preserve the dimensions of the feature map, which ensures that the network retains contextual information for each patch of the image.
+### **Dense Layer**
+One dense layer is used at the end of our PatchGAN, learning from the abstraction of the features to make a prediction about the authenticity of the image. Like the CNN, we use a sigmoid activation function. In the PatchGAN, the output of this layer is the "patch-wise classification score," because the model makes use of information and context inferred from the patches to make predictions about them, using them towards an overall prediction about the image.
+
+## **Results**
+
 
 
 
